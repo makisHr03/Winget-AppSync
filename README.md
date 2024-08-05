@@ -27,7 +27,8 @@ To install AppSync, run the provided executable file (`AppSync.exe`) and select 
 If you install the application, you can access it from the Start Menu in Windows.
 
 ### Menu Options
-![image](https://github.com/user-attachments/assets/f5a0b3ce-e9de-4adf-a943-6cb6acaa6e2b)
+![image](https://github.com/user-attachments/assets/33934beb-626e-4245-828a-556d651dc1b2)
+
 
 1. **See available updates**: Lists all available updates for installed applications.
 2. **Update all**: Updates all installed applications to the latest version.

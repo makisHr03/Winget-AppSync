@@ -102,13 +102,13 @@ if %errorlevel% neq 0 (
     if /i "%choice_upgrade%" equ "y" (
         winget upgrade --all
     )
-    goto menu_winget
+    goto logo
 
 :update_all
     cls
     :: Update all applications using winget
     winget upgrade --all
-    goto menu_winget
+    goto logo
 
 :see_list
     cls
@@ -116,7 +116,7 @@ if %errorlevel% neq 0 (
     winget list
     echo.
     pause
-    goto menu_winget
+    goto logo
 
 :find_application
     cls
@@ -127,7 +127,7 @@ if %errorlevel% neq 0 (
     winget search "%choice_name_application%"
     echo.
     pause
-    goto menu_winget
+    goto logo
 
 :find_information
     cls
@@ -138,7 +138,7 @@ if %errorlevel% neq 0 (
     winget show "%choice_name_application%"
     echo.
     pause
-    goto menu_winget
+    goto logo
 
 :install
     cls
@@ -182,7 +182,7 @@ if %errorlevel% neq 0 (
 
     :: Pause to see the result
     pause
-    goto menu_winget
+    goto logo
 
 :uninstall
     cls
@@ -204,7 +204,7 @@ if %errorlevel% neq 0 (
     )
 
     pause
-    goto menu_winget
+    goto logo
 
 :exit_script
     :: Set the flag to exit the script

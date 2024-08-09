@@ -1,35 +1,27 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Check if the script is running with administrative privileges
-net session >nul 2>&1
+:: Check if winget command exists
+winget --version >nul 2>&1
 if %errorlevel% neq 0 (
-    goto admin_access
+    echo The winget tool is not installed!
+    set /p "choice_install=Do you want to install it? (y/n): "
+    goto choice_winget
 ) else (
-    goto check_winget
+    goto logo
 )
-
-:check_winget
-    :: Check if winget command exists
-    winget --version >nul 2>&1
-    if %errorlevel% equ 0 (
-        goto logo
-    ) else (
-        echo The winget tool is not installed!
-        set /p "choice_install=Do you want to install it? (y/n): "
-        goto choice_winget
-    )
 
 :choice_winget
     if /i "%choice_install%" equ "y" (
         echo Attempting to install...
-        goto install_winget
+        goto admin_check_winget
     ) else if /i "%choice_install%" equ "n" (
         set "exit_script=2"
         goto logo
     ) else (
         echo Invalid choice. Please enter 'y' or 'n'.
         pause
+        cls
         goto check_winget
     )
 
@@ -83,8 +75,8 @@ if %errorlevel% neq 0 (
     if "%option%" equ "3" goto see_list
     if "%option%" equ "4" goto find_application
     if "%option%" equ "5" goto find_information
-    if "%option%" equ "6" goto install
-    if "%option%" equ "7" goto uninstall
+    if "%option%" equ "6" goto admin_check_install
+    if "%option%" equ "7" goto admin_check_uninstall
     if "%option%" equ "8" goto exit_script
 
     :: If the input doesn't match any option
@@ -140,8 +132,40 @@ if %errorlevel% neq 0 (
     pause
     goto logo
 
-:install
-    cls
+:admin_check_winget
+    :: Check if the script is running with administrative privileges for winget installation
+    net session >nul 2>&1
+    if %errorlevel% neq 0 (
+        cls
+        goto admin_access_winget
+    ) else (
+        cls
+        goto install_winget
+    )
+
+:admin_check_install
+    :: Check if the script is running with administrative privileges for AppSync installation
+    net session >nul 2>&1
+    if %errorlevel% neq 0 (
+        cls
+        goto admin_access_install
+    ) else (
+        cls
+        goto perform_install
+    )
+
+:admin_check_uninstall
+    :: Check if the script is running with administrative privileges for AppSync uninstallation
+    net session >nul 2>&1
+    if %errorlevel% neq 0 (
+        cls
+        goto admin_access_uninstall
+    ) else (
+        cls
+        goto perform_uninstall
+    )
+
+:perform_install
     :: Define the target directory and shortcut paths
     set "installation_path=C:\Program Files (x86)\AppSync"
     set "shortcut_path=C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AppSync.lnk"
@@ -184,8 +208,7 @@ if %errorlevel% neq 0 (
     pause
     goto logo
 
-:uninstall
-    cls
+:perform_uninstall
     :: Define the installation folder and shortcut paths
     set "shortcut_path=C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AppSync.lnk"
     set "installation_path=C:\Program Files (x86)\AppSync"
@@ -211,10 +234,10 @@ if %errorlevel% neq 0 (
     set "exit_script=1"
     goto logo
 
-:admin_access
-    :: Inform the user that the script is not running with admin privileges
+:admin_access_winget
+    :: Inform the user that the script is not running with admin privileges for winget installation
     echo The script is not running with administrator privileges!
-    set /p "choice=Do you want to run this script with administrative privileges? (y/n): "
+    set /p "choice=Do you want to run this script with administrative privileges to install winget? (y/n): "
 
     :: Prompt to rerun the script with admin privileges if the user chooses 'y'
     if /i "%choice%" equ "y" (
@@ -227,7 +250,49 @@ if %errorlevel% neq 0 (
         del "%temp%\getadmin.vbs"
         exit /b
     ) else (
-        echo If you want to run it, please run the script as administrator!
+        echo If you want to install winget, please run the script as administrator!
+        pause
+        exit /b
+    )
+
+:admin_access_install
+    :: Inform the user that the script is not running with admin privileges for AppSync installation
+    echo The script is not running with administrator privileges!
+    set /p "choice=Do you want to run this script with administrative privileges to install AppSync? (y/n): "
+
+    :: Prompt to rerun the script with admin privileges if the user chooses 'y'
+    if /i "%choice%" equ "y" (
+        :: Create a VBScript to request admin privileges
+        echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+        echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %*", "", "runas", 1 >> "%temp%\getadmin.vbs"
+        
+        :: Execute the VBScript and delete it
+        "%temp%\getadmin.vbs"
+        del "%temp%\getadmin.vbs"
+        exit /b
+    ) else (
+        echo If you want to install AppSync, please run the script as administrator!
+        pause
+        exit /b
+    )
+
+:admin_access_uninstall
+    :: Inform the user that the script is not running with admin privileges for AppSync uninstallation
+    echo The script is not running with administrator privileges!
+    set /p "choice=Do you want to run this script with administrative privileges to uninstall AppSync? (y/n): "
+
+    :: Prompt to rerun the script with admin privileges if the user chooses 'y'
+    if /i "%choice%" equ "y" (
+        :: Create a VBScript to request admin privileges
+        echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+        echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %*", "", "runas", 1 >> "%temp%\getadmin.vbs"
+        
+        :: Execute the VBScript and delete it
+        "%temp%\getadmin.vbs"
+        del "%temp%\getadmin.vbs"
+        exit /b
+    ) else (
+        echo If you want to uninstall AppSync, please run the script as administrator!
         pause
         exit /b
     )

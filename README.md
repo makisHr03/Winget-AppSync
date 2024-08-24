@@ -1,4 +1,6 @@
 # AppSync
+![Untitled-2](https://github.com/user-attachments/assets/866662a8-8f10-4c10-8c24-36fdfcdd4d61)
+
 
 AppSync is a batch script designed to help manage applications on Windows using `winget`. It includes functionalities such as checking for updates, installing, and uninstalling programs.
 

@@ -17,19 +17,30 @@ AppSync is a batch script designed to help manage applications on Windows using 
   - Install the AppSync
   - Uninstall the AppSync
 
-## Installation
+## Installation and Running
 
-To install AppSync, run the provided executable file (`AppSync.exe`) and select the install option from the menu.
+1. **Download and Extract**:
+   - Download the `AppSync` folder from the repository.
+   - Extract the contents if downloaded as a compressed file.
 
-## Usage
+2. **Run the Installer**:
+   - Navigate to the extracted folder.
+   - Run the installer batch file: `AppSync.bat`. Ψhoose install.
+   - This will install the script and create necessary shortcuts.
 
-1. Run `AppSync.exe` to start the application.
-2. Follow the on-screen instructions to manage your applications.
+3. **Run AppSync**:
+   - After installation, you can run `AppSync` directly from the Start Menu or by using the provided shortcut.
 
-If you install the application, you can access it from the Start Menu in Windows.
+### Option 2: Manual Installation
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/makisHr03/Winget-AppSync.git
+   cd AppSync
+
 
 ### Menu Options
-![image](https://github.com/user-attachments/assets/33934beb-626e-4245-828a-556d651dc1b2)
+![image](https://github.com/user-attachments/assets/74fba2e2-0f99-46bd-8397-2dd86615c449)
 
 
 1. **See available updates**: Lists all available updates for installed applications.
@@ -39,7 +50,8 @@ If you install the application, you can access it from the Start Menu in Windows
 5. **Find information for one application**: Prompts you to enter the name of an application to get detailed information.
 6. **Install the AppSync**: Installs the AppSync tool.
 7. **Uninstall the AppSync**: Uninstalls the AppSync tool.
-8. **Exit**: Exits the script.
+8. **Upgrade AppSync**: Upgrade the AppSync tool.
+9. **Exit**: Exits the script.
 
 ## License
 

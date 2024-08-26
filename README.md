@@ -25,7 +25,7 @@ AppSync is a batch script designed to help manage applications on Windows using 
 
 2. **Run the Installer**:
    - Navigate to the extracted folder.
-   - Run the installer batch file: `AppSync.bat`. Ψhoose install.
+   - Run the installer batch file: `AppSync.bat`. Choose install.
    - This will install the script and create necessary shortcuts.
 
 3. **Run AppSync**:

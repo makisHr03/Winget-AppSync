@@ -34,7 +34,7 @@ if %errorlevel% neq 0 (
     echo "| / ___ \| |_) | |_) |__) | |_| | | | | (__ |"
     echo "|/_/   \_\ .__/| .__/____/ \__, |_| |_|\___||"
     echo "|        |_|   |_|         |___/            |"
-    echo.
+    echo                                         v1.3.0
     echo.
 
     :: Check if the script should exit
@@ -69,7 +69,7 @@ if %errorlevel% neq 0 (
     echo 9. Exit
 
     :: Get user input for menu selection
-    set /p option=Choose an option (1-8):
+    set /p option=Choose an option (1-9):
 
     :: Redirect to the appropriate section based on user input
     if "%option%" equ "1" goto see_available_updates
@@ -169,46 +169,69 @@ if %errorlevel% neq 0 (
     )
 
 :perform_install
-    :: Define the target directory and shortcut paths
-    set "installation_path=C:\Program Files (x86)\AppSync"
-    set "shortcut_path=C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AppSync.lnk"
+:: Define variables
+SET "mypath=%~dp0"
+set "upgrader_path=%mypath%src\Upgrader.bat"
+set "icon_file_path=%mypath%src\appsync_icon.ico"
+set "appsync_file_path=%mypath%\AppSync.bat"
+set "destination_path=C:\Program Files (x86)\AppSync"
+set "shortcut_path=C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AppSync.lnk"
+set "shortcut_name=AppSync"
+set "target_path_shortcut=%destination_path%\AppSync.bat"
+set "icon_path=%destination_path%\appsync_icon.ico"
 
-    :: Create the target directory if it doesn't exist
-    set "install_status=0"
-    if not exist "%installation_path%" (
-        mkdir "%installation_path%"
-        set "install_status=1"
-    )
+:: Create destination directory if it does not exist
+if not exist "%destination_path%" (
+    mkdir "%destination_path%"
+)
 
-    :: Copy the batch file to the target directory
-    copy "%~f0" "%installation_path%" >nul
-
-    :: Create the VBScript to create the shortcut
-    set "vbs_file=create_shortcut.vbs"
-    (
-        echo Set WScriptShell = CreateObject("WScript.Shell"^)
-        echo Set Shortcut = WScriptShell.CreateShortcut("%shortcut_path%"^)
-        echo Shortcut.TargetPath = "%installation_path%\%~nx0"
-        echo Shortcut.WorkingDirectory = "%installation_path%"
-        echo Shortcut.Save
-    ) > "%vbs_file%"
-
-    :: Execute the VBScript
-    cscript //nologo "%vbs_file%"
-
-    :: Clean up the VBScript
-    del "%vbs_file%"
-
-    cls
-    :: Display installation status
-    if "%install_status%" equ "1" (
-        echo The program was installed successfully!
-    ) else (
-        echo The program is already installed!
-    )
-
-    :: Pause to see the result
+:: Copy the files
+copy "%appsync_file_path%" "%destination_path%"
+if errorlevel 1 (
+    echo Error_1
+    echo Oops! Something went wrong. Please help us improve by reporting this issue on GitHub: https://github.com/makisHr03/FileOrganizeSuite/issues
     pause
+    exit /b
+)
+
+
+copy "%upgrader_path%" "%destination_path%"
+if errorlevel 1 (
+    echo Error_3
+    echo Oops! Something went wrong. Please help us improve by reporting this issue on GitHub: https://github.com/makisHr03/FileOrganizeSuite/issues
+    pause
+    exit /b
+)
+
+copy "%icon_file_path%" "%destination_path%"
+if errorlevel 1 (
+    echo Error_4
+    echo Oops! Something went wrong. Please help us improve by reporting this issue on GitHub: https://github.com/makisHr03/FileOrganizeSuite/issues
+    pause
+    exit /b
+)
+
+:: Create a shortcut
+echo Set oWS = WScript.CreateObject("WScript.Shell") > temp_create_shortcut.vbs
+echo sLinkFile = "%shortcut_path%" >> temp_create_shortcut.vbs
+echo Set oLink = oWS.CreateShortcut(sLinkFile) >> temp_create_shortcut.vbs
+echo oLink.TargetPath = "%target_path_shortcut%" >> temp_create_shortcut.vbs
+echo oLink.IconLocation = "%icon_path%" >> temp_create_shortcut.vbs
+echo oLink.Save >> temp_create_shortcut.vbs
+
+cscript //nologo temp_create_shortcut.vbs
+del temp_create_shortcut.vbs
+
+if not exist "%shortcut_path%" (
+    echo Error_5
+    echo Oops! Something went wrong. Please help us improve by reporting this issue on GitHub: https://github.com/makisHr03/FileOrganizeSuite/issues
+    pause
+    exit /b
+)
+
+cls
+echo Program has been installed successfully.
+pause
     goto logo
 
 :perform_uninstall
@@ -301,7 +324,8 @@ if %errorlevel% neq 0 (
     )
 
 :update_appsync
-    Updater.bat
+    set mypath=%~dp0
+    "C:\Program Files (x86)\AppSync\Upgrader.bat"
     exit
 
 :install_winget

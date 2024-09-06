@@ -34,7 +34,7 @@ if %errorlevel% neq 0 (
     echo "| / ___ \| |_) | |_) |__) | |_| | | | | (__ |"
     echo "|/_/   \_\ .__/| .__/____/ \__, |_| |_|\___||"
     echo "|        |_|   |_|         |___/            |"
-    echo                                         v1.3.0
+    echo                                         v1.3.1
     echo.
 
     :: Check if the script should exit
